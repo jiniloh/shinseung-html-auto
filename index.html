@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>성경 본문 HTML 생성기</title>
+
+<style>
+body{
+font-family:Arial;
+max-width:800px;
+margin:40px auto;
+background:#f3f4f6;
+}
+
+textarea{
+width:100%;
+height:200px;
+margin-bottom:10px;
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+input{
+width:100%;
+padding:8px;
+margin-bottom:5px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+.btn-group{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+button{
+padding:10px 20px;
+cursor:pointer;
+border:none;
+border-radius:8px;
+font-weight:bold;
+}
+
+.btn-generate{
+background:#3f6fb6;
+color:#fff;
+}
+
+.btn-copy{
+background:#10b981;
+color:#fff;
+}
+
+.copy-msg{
+font-size:13px;
+margin-left:10px;
+color:#10b981;
+}
+
+#preview{
+width:100%;
+height:400px;
+border:1px solid #ddd;
+border-radius:10px;
+margin-top:10px;
+background:#fff;
+}
+
+/* 🔥 툴팁 */
+.tooltip-wrap{
+position:relative;
+display:inline-block;
+}
+
+.tooltip-box{
+display:none;
+position:absolute;
+top:32px;
+left:0;
+width:320px;
+background:#fff;
+border-radius:12px;
+box-shadow:0 8px 20px rgba(0,0,0,0.2);
+padding:12px;
+z-index:999;
+font-size:13px;
+line-height:1.6;
+opacity:0;
+transition:opacity 0.15s ease;
+}
+
+/* 화살표 */
+.tooltip-box::before{
+content:"";
+position:absolute;
+top:-8px;
+left:20px;
+border-width:8px;
+border-style:solid;
+border-color:transparent transparent #fff transparent;
+}
+
+/* hover 활성 */
+.tooltip-wrap.hover-active .tooltip-box{
+display:block;
+opacity:1;
+}
+
+/* 클릭 활성 */
+.tooltip-box.active{
+display:block;
+opacity:1;
+}
+
+.tooltip-box img{
+width:100%;
+border-radius:8px;
+margin-top:8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>성경 본문 HTML 생성기</h2>
+
+MP3 파일명
+<input id="mp3" placeholder="260215_c.mp3">
+
+패밀리모임지 링크 (선택)
+
+<div class="tooltip-wrap" id="tooltipWrap">
+
+<span id="infoBtn"
+style="cursor:pointer;color:#3f6fb6;font-weight:bold;margin-left:6px;">
+ℹ️
+</span>
+
+<div id="helpBox" class="tooltip-box">
+<b>📌 링크 복사 방법</b><br>
+1️⃣ 다운로드 버튼 우클릭<br>
+2️⃣ <b>링크 주소 복사</b> 클릭<br>
+<img src="guide.png">
+</div>
+
+</div>
+
+<input id="lesson" placeholder="http://www.shinseung.or.kr/File/Download?...">
+
+성경 본문 전체 붙여넣기
+<textarea id="bible" placeholder="1. ...
+2. ...
+3. ..."></textarea>
+
+<div class="btn-group">
+<button class="btn-generate" onclick="generate()">HTML 생성 + 미리보기</button>
+<button class="btn-copy" onclick="copyHtml()">복사</button>
+<span id="copyMsg" class="copy-msg"></span>
+</div>
+
+<h3>생성된 HTML</h3>
+<textarea id="output"></textarea>
+
+<h3>미리보기</h3>
+<iframe id="preview"></iframe>
+
+<script>
+
+/* 🔥 툴팁 제어 */
+const wrap = document.getElementById("tooltipWrap");
+const box = document.getElementById("helpBox");
+const btn = document.getElementById("infoBtn");
+
+let hoverTimer;
+
+/* hover delay */
+wrap.addEventListener("mouseenter", ()=>{
+    hoverTimer = setTimeout(()=>{
+        wrap.classList.add("hover-active");
+        adjustTooltip();
+    }, 300);
+});
+
+wrap.addEventListener("mouseleave", ()=>{
+    clearTimeout(hoverTimer);
+    wrap.classList.remove("hover-active");
+});
+
+/* 클릭 토글 */
+btn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    box.classList.toggle("active");
+    adjustTooltip();
+});
+
+/* 바깥 클릭 닫기 */
+document.addEventListener("click", ()=>{
+    box.classList.remove("active");
+});
+
+/* 🔥 위치 자동 조정 */
+function adjustTooltip(){
+
+    setTimeout(()=>{
+
+        let rect = box.getBoundingClientRect();
+
+        /* 오른쪽 넘침 */
+        if(rect.right > window.innerWidth){
+            box.style.left = "auto";
+            box.style.right = "0";
+        }else{
+            box.style.left = "0";
+            box.style.right = "auto";
+        }
+
+        /* 아래 넘침 */
+        if(rect.bottom > window.innerHeight){
+            box.style.top = "auto";
+            box.style.bottom = "32px";
+        }else{
+            box.style.top = "32px";
+            box.style.bottom = "auto";
+        }
+
+    }, 10);
+}
+
+/* HTML 생성 */
+function generate(){
+
+let mp3=document.getElementById("mp3").value.trim();
+let lesson=document.getElementById("lesson").value.trim();
+
+if (mp3 && !mp3.toLowerCase().endsWith(".mp3")) {
+    mp3 += ".mp3";
+}
+
+let text=document.getElementById("bible").value.trim();
+let lines=text.split(/\n+/);
+
+let verses=[];
+let numbers=[];
+
+for(let line of lines){
+    line=line.trim();
+    if(line==="") continue;
+
+    let match=line.match(/^(\d+)[\.\)]?\s*(.*)$/);
+
+    if(match){
+        numbers.push(match[1]);
+        verses.push(match[2]);
+    }else{
+        numbers.push(verses.length+1);
+        verses.push(line);
+    }
+}
+
+let html=`<div style="padding:12px;background:#f5f6f8;border-radius:16px;">`;
+
+html+=`<div style="margin-bottom:14px; display:flex; gap:10px;">`;
+
+if(mp3){
+let mp3Url = `http://vod.shinseung.or.kr/download.jsp?file=http://vod.shinseung.or.kr/vod/new/2026/${mp3}`;
+html+=`<a href="${mp3Url}" style="padding:10px 20px;background:#3f6fb6;color:#fff;border-radius:30px;text-decoration:none;">🎧 MP3 다운로드</a>`;
+}
+
+if(lesson){
+html+=`<a href="${lesson}" target="_blank" style="padding:10px 20px;background:#4caf50;color:#fff;border-radius:30px;text-decoration:none;">📄 패밀리모임지 다운로드</a>`;
+}
+
+html+=`</div>`;
+
+html+=`<div style="font-size:18px;font-weight:bold;margin-bottom:10px;">📖 성경 본문</div>`;
+html+=`<div style="background:#fff;padding:14px;border-radius:12px;">`;
+
+for(let i=0;i<verses.length;i++){
+html+=`<div><b>${numbers[i]}</b> ${verses[i]}</div>`;
+}
+
+html+=`</div></div>`;
+
+document.getElementById("output").value=html;
+document.getElementById("preview").srcdoc = html;
+
+}
+
+/* 복사 */
+function copyHtml(){
+
+let text = document.getElementById("output").value;
+
+if(!text){
+    alert("먼저 HTML 생성하세요");
+    return;
+}
+
+navigator.clipboard.writeText(text).then(()=>{
+    let msg = document.getElementById("copyMsg");
+    msg.innerText = "복사 완료 ✅";
+    setTimeout(()=> msg.innerText="", 2000);
+});
+
+}
+
+</script>
+
+</body>
+</html>
