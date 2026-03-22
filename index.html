@@ -68,6 +68,14 @@ margin-top:10px;
 background:#fff;
 }
 
+/* version */
+.version{
+font-size:12px;
+color:#888;
+text-align:right;
+margin-bottom:10px;
+}
+
 /* 툴팁 */
 .tooltip-wrap{
 position:relative;
@@ -122,6 +130,7 @@ margin-top:8px;
 <body>
 
 <h2>성경 본문 HTML 생성기</h2>
+<div class="version">v1.5</div>
 
 MP3 파일명
 <input id="mp3" placeholder="260215_c.mp3">
@@ -219,10 +228,15 @@ for(let line of lines){
 
 let html=`<div style="padding:12px;background:#f5f6f8;border-radius:16px;">`;
 
+/* 🔥 버튼 영역 (둘 중 하나라도 있을 때만 생성) */
+if(mp3 || lesson){
+
 html+=`<div style="margin-bottom:14px; display:flex; gap:10px;">`;
 
 if(mp3){
-let mp3Url = `http://vod.shinseung.or.kr/download.jsp?file=http://vod.shinseung.or.kr/vod/new/2026/${mp3}`;
+let fileUrl = `http://vod.shinseung.or.kr/vod/new/2026/${mp3}`;
+let mp3Url = `http://vod.shinseung.or.kr/download.jsp?file=${encodeURIComponent(fileUrl)}`;
+
 html+=`<a href="${mp3Url}" style="padding:10px 20px;background:#3f6fb6;color:#fff;border-radius:30px;text-decoration:none;">🎧 MP3 다운로드</a>`;
 }
 
@@ -231,6 +245,7 @@ html+=`<a href="${lesson}" target="_blank" style="padding:10px 20px;background:#
 }
 
 html+=`</div>`;
+}
 
 html+=`<div style="font-size:18px;font-weight:bold;margin-bottom:10px;">📖 성경 본문</div>`;
 html+=`<div style="background:#ffffff;padding:5px 16px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.08);font-size:16px;line-height:1.85;">`;
