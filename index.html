@@ -68,7 +68,7 @@ margin-top:10px;
 background:#fff;
 }
 
-/* 🔥 툴팁 */
+/* 툴팁 */
 .tooltip-wrap{
 position:relative;
 display:inline-block;
@@ -91,7 +91,6 @@ opacity:0;
 transition:opacity 0.15s ease;
 }
 
-/* 화살표 */
 .tooltip-box::before{
 content:"";
 position:absolute;
@@ -102,13 +101,11 @@ border-style:solid;
 border-color:transparent transparent #fff transparent;
 }
 
-/* hover 활성 */
 .tooltip-wrap.hover-active .tooltip-box{
 display:block;
 opacity:1;
 }
 
-/* 클릭 활성 */
 .tooltip-box.active{
 display:block;
 opacity:1;
@@ -119,7 +116,6 @@ width:100%;
 border-radius:8px;
 margin-top:8px;
 }
-
 </style>
 </head>
 
@@ -133,11 +129,7 @@ MP3 파일명
 패밀리모임지 링크 (선택)
 
 <div class="tooltip-wrap" id="tooltipWrap">
-
-<span id="infoBtn"
-style="cursor:pointer;color:#3f6fb6;font-weight:bold;margin-left:6px;">
-ℹ️
-</span>
+<span id="infoBtn" style="cursor:pointer;color:#3f6fb6;font-weight:bold;margin-left:6px;">ℹ️</span>
 
 <div id="helpBox" class="tooltip-box">
 <b>📌 링크 복사 방법</b><br>
@@ -145,7 +137,6 @@ style="cursor:pointer;color:#3f6fb6;font-weight:bold;margin-left:6px;">
 2️⃣ <b>링크 주소 복사</b> 클릭<br>
 <img src="guide.png">
 </div>
-
 </div>
 
 <input id="lesson" placeholder="http://www.shinseung.or.kr/File/Download?...">
@@ -169,18 +160,15 @@ style="cursor:pointer;color:#3f6fb6;font-weight:bold;margin-left:6px;">
 
 <script>
 
-/* 🔥 툴팁 제어 */
 const wrap = document.getElementById("tooltipWrap");
 const box = document.getElementById("helpBox");
 const btn = document.getElementById("infoBtn");
 
 let hoverTimer;
 
-/* hover delay */
 wrap.addEventListener("mouseenter", ()=>{
     hoverTimer = setTimeout(()=>{
         wrap.classList.add("hover-active");
-        adjustTooltip();
     }, 300);
 });
 
@@ -189,47 +177,16 @@ wrap.addEventListener("mouseleave", ()=>{
     wrap.classList.remove("hover-active");
 });
 
-/* 클릭 토글 */
 btn.addEventListener("click", (e)=>{
     e.stopPropagation();
+    wrap.classList.remove("hover-active");
     box.classList.toggle("active");
-    adjustTooltip();
 });
 
-/* 바깥 클릭 닫기 */
 document.addEventListener("click", ()=>{
     box.classList.remove("active");
 });
 
-/* 🔥 위치 자동 조정 */
-function adjustTooltip(){
-
-    setTimeout(()=>{
-
-        let rect = box.getBoundingClientRect();
-
-        /* 오른쪽 넘침 */
-        if(rect.right > window.innerWidth){
-            box.style.left = "auto";
-            box.style.right = "0";
-        }else{
-            box.style.left = "0";
-            box.style.right = "auto";
-        }
-
-        /* 아래 넘침 */
-        if(rect.bottom > window.innerHeight){
-            box.style.top = "auto";
-            box.style.bottom = "32px";
-        }else{
-            box.style.top = "32px";
-            box.style.bottom = "auto";
-        }
-
-    }, 10);
-}
-
-/* HTML 생성 */
 function generate(){
 
 let mp3=document.getElementById("mp3").value.trim();
@@ -276,10 +233,32 @@ html+=`<a href="${lesson}" target="_blank" style="padding:10px 20px;background:#
 html+=`</div>`;
 
 html+=`<div style="font-size:18px;font-weight:bold;margin-bottom:10px;">📖 성경 본문</div>`;
-html+=`<div style="background:#fff;padding:14px;border-radius:12px;">`;
+html+=`<div style="background:#ffffff;padding:5px 16px;border-radius:10px;box-shadow:0 3px 10px rgba(0,0,0,0.08);font-size:16px;line-height:1.85;">`;
 
 for(let i=0;i<verses.length;i++){
-html+=`<div><b>${numbers[i]}</b> ${verses[i]}</div>`;
+
+let num = numbers[i];
+
+if(i < verses.length - 1){
+html+=`
+<div style="margin-bottom:14px;border-bottom:1px solid #eee;padding-bottom:8px;">
+<span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;background:#3f6fb6;color:#fff;border-radius:50%;font-size:13px;margin-right:8px;">
+${num}
+</span>
+${verses[i]}
+</div>
+`;
+}else{
+html+=`
+<div>
+<span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;background:#3f6fb6;color:#fff;border-radius:50%;font-size:13px;margin-right:8px;">
+${num}
+</span>
+${verses[i]}
+</div>
+`;
+}
+
 }
 
 html+=`</div></div>`;
@@ -289,7 +268,6 @@ document.getElementById("preview").srcdoc = html;
 
 }
 
-/* 복사 */
 function copyHtml(){
 
 let text = document.getElementById("output").value;
