@@ -235,7 +235,7 @@ html+=`<div style="margin-bottom:14px; display:flex; gap:10px;">`;
 
 if(mp3){
 let fileUrl = `http://vod.shinseung.or.kr/vod/new/2026/${mp3}`;
-let mp3Url = `http://vod.shinseung.or.kr/download.jsp?file=${encodeURIComponent(fileUrl)}`;
+let mp3Url = `http://vod.shinseung.or.kr/download.jsp?file=${fileUrl}`;
 
 html+=`<a href="${mp3Url}" style="padding:10px 20px;background:#3f6fb6;color:#fff;border-radius:30px;text-decoration:none;">🎧 MP3 다운로드</a>`;
 }
