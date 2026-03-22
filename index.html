@@ -132,7 +132,7 @@ margin-top:8px;
 <body>
 
 <h2>성경 본문 HTML 생성기</h2>
-<div class="version">v1.8</div>
+<div class="version">v1.9</div>
 
 MP3 파일명
 <input id="mp3" placeholder="260215_c.mp3">
@@ -287,7 +287,24 @@ ${verses[i]}
 html+=`</div></div>`;
 
 document.getElementById("output").value=html;
-document.getElementById("preview").innerHTML = html;
+
+// [추가] 미리보기 안내 메시지
+let previewNotice = `
+<div style="
+margin-bottom:10px;
+padding:10px;
+background:#fff3cd;
+color:#856404;
+border-radius:8px;
+font-size:13px;
+border:1px solid #ffeeba;
+">
+⚠️ 현재 페이지에서는 다운로드가 동작하지 않을 수 있습니다.<br>
+실제 말씀 업로드 페이지에서 확인해주세요. (https에서 http 다운로드를 지원하지 않습니다)
+</div>
+`;
+
+document.getElementById("preview").innerHTML = previewNotice + html;
 
 }
 
