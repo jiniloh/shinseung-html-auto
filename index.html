@@ -61,11 +61,13 @@ color:#10b981;
 
 #preview{
 width:100%;
-height:400px;
+min-height:400px;
 border:1px solid #ddd;
 border-radius:10px;
 margin-top:10px;
 background:#fff;
+padding:10px;
+overflow:auto;
 }
 
 /* version */
@@ -130,7 +132,7 @@ margin-top:8px;
 <body>
 
 <h2>성경 본문 HTML 생성기</h2>
-<div class="version">v1.6</div>
+<div class="version">v1.7</div>
 
 MP3 파일명
 <input id="mp3" placeholder="260215_c.mp3">
@@ -167,6 +169,8 @@ MP3 파일명
 <h3>미리보기</h3>
 <iframe id="preview"></iframe>
 
+<div id="preview"></div>
+    
 <script>
 
 const wrap = document.getElementById("tooltipWrap");
@@ -284,7 +288,7 @@ ${verses[i]}
 html+=`</div></div>`;
 
 document.getElementById("output").value=html;
-document.getElementById("preview").srcdoc = html;
+document.getElementById("preview").innerHTML = html;
 
 }
 
