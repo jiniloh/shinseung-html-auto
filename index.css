@@ -262,6 +262,23 @@ textarea{
     background:var(--success-dark);
 }
 
+.button-ghost{
+    background:transparent;
+    color:var(--muted);
+    border:1px solid var(--border);
+}
+
+.button-ghost:hover{
+    background:#f1f4f9;
+    color:var(--text);
+}
+
+.button-small{
+    padding:8px 14px;
+    font-size:13px;
+    border-radius:10px;
+}
+
 .copy-msg{
     min-height:20px;
     font-size:13px;
