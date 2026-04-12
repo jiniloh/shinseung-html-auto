@@ -1,4 +1,5 @@
 const CURRENT_YEAR = "2026";
+const CANONICAL_LESSON_URL = "http://www.shinseung.or.kr/File/Download";
 
 const CANONICAL_BOOKS = [
     { code: "창", name: "창세기" },
@@ -72,6 +73,7 @@ const CANONICAL_BOOKS = [
 const elements = {
     mp3Input: document.getElementById("mp3"),
     lessonInput: document.getElementById("lesson"),
+    lessonNotice: document.getElementById("lessonNotice"),
     bibleInput: document.getElementById("bible"),
     output: document.getElementById("output"),
     preview: document.getElementById("preview"),
@@ -271,15 +273,118 @@ function clearBibleInput() {
     setBibleStatus("입력창을 비웠습니다.");
 }
 
+function setLessonNotice(message, type = "") {
+    if (!elements.lessonNotice) return;
+
+    elements.lessonNotice.innerText = message;
+    elements.lessonNotice.className = "field-notice";
+
+    if (!message) return;
+
+    elements.lessonNotice.classList.add("is-visible");
+
+    if (type) {
+        elements.lessonNotice.classList.add(`field-notice-${type}`);
+    }
+}
+
+function safeDecodeURIComponent(value) {
+    try {
+        return decodeURIComponent(value);
+    } catch {
+        return value;
+    }
+}
+
+function extractParamFileU(value) {
+    const candidates = [value.trim()];
+    const decodedValue = safeDecodeURIComponent(value.trim());
+
+    if (decodedValue !== candidates[0]) {
+        candidates.push(decodedValue);
+    }
+
+    for (const candidate of candidates) {
+        const normalizedCandidate = candidate.replace(/&amp;/gi, "&");
+
+        try {
+            const url = new URL(normalizedCandidate);
+            const paramFileU = url.searchParams.get("paramFileU");
+
+            if (paramFileU) {
+                return paramFileU.trim();
+            }
+        } catch {
+            // URL 객체로 파싱되지 않으면 아래 정규식으로 다시 확인합니다.
+        }
+
+        const match = normalizedCandidate.match(/[?&]paramFileU=([^&#\s]+)/i);
+        if (match && match[1]) {
+            return match[1].trim();
+        }
+    }
+
+    return "";
+}
+
+function normalizeLessonUrl(rawValue) {
+    const trimmedValue = rawValue.trim();
+
+    if (!trimmedValue) {
+        return {
+            value: "",
+            valid: true,
+            changed: false,
+            message: "",
+            type: ""
+        };
+    }
+
+    const paramFileU = extractParamFileU(trimmedValue);
+
+    if (!paramFileU) {
+        return {
+            value: trimmedValue,
+            valid: false,
+            changed: false,
+            message: "패밀리모임지 링크에서 paramFileU 값을 찾지 못했습니다. 링크를 다시 확인해 주세요.",
+            type: "warning"
+        };
+    }
+
+    const normalizedValue = `${CANONICAL_LESSON_URL}?paramFileU=${encodeURIComponent(paramFileU)}`;
+    const changed = trimmedValue !== normalizedValue;
+
+    return {
+        value: normalizedValue,
+        valid: true,
+        changed,
+        message: changed ? "패밀리모임지 링크를 정상 주소로 자동 변환했습니다." : "",
+        type: changed ? "success" : ""
+    };
+}
+
+function syncLessonInput() {
+    const normalized = normalizeLessonUrl(elements.lessonInput.value);
+
+    if (elements.lessonInput.value !== normalized.value) {
+        elements.lessonInput.value = normalized.value;
+    }
+
+    setLessonNotice(normalized.message, normalized.type);
+    return normalized;
+}
+
 function getFormData() {
     const rawMp3 = elements.mp3Input.value.trim();
     const mp3 = rawMp3 && !rawMp3.toLowerCase().endsWith(".mp3")
         ? `${rawMp3}.mp3`
         : rawMp3;
+    const normalizedLesson = syncLessonInput();
 
     return {
         mp3,
-        lesson: elements.lessonInput.value.trim(),
+        lesson: normalizedLesson.value,
         bibleText: elements.bibleInput.value.trim()
     };
 }
@@ -340,7 +445,7 @@ style="padding:10px 20px;background:#3f6fb6;color:#fff;border-radius:30px;text-d
         buttons.push(`
 <a href="${lesson}" target="_blank"
 style="padding:10px 20px;background:#4caf50;color:#fff;border-radius:30px;text-decoration:none;">
-설교노트 다운로드
+패밀리모임지 다운로드
 </a>`);
     }
 
@@ -444,6 +549,15 @@ function bindEvents() {
     elements.bookSelect.addEventListener("change", updateChapterOptions);
     elements.chapterSelect.addEventListener("change", updateVerseOptions);
     elements.verseStartSelect.addEventListener("change", updateVerseEndOptions);
+    elements.lessonInput.addEventListener("blur", syncLessonInput);
+    elements.lessonInput.addEventListener("paste", () => {
+        window.setTimeout(syncLessonInput, 0);
+    });
+    elements.lessonInput.addEventListener("input", () => {
+        if (!elements.lessonInput.value.trim()) {
+            setLessonNotice("");
+        }
+    });
     elements.addPassageBtn.addEventListener("click", appendSelectedPassage);
     elements.clearPassageBtn.addEventListener("click", clearBibleInput);
     elements.generateBtn.addEventListener("click", generate);

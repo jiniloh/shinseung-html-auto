@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>주일 성경 본문 HTML 생성기 2.1</title>
+<title>주일 성경 본문 HTML 생성기 2.2</title>
 <link rel="stylesheet" href="index.css">
 </head>
 
@@ -12,10 +12,10 @@
     <main class="app-card">
         <header class="app-header">
             <div>
-                <h1 class="app-title">주일 성경 본문 HTML 생성기 2.1</h1>
-                <p class="app-description">말씀 MP3 파일명, 설교노트 링크, 성경 본문을 입력하면 게시판용 HTML을 생성합니다. 본문은 여러 구절을 추가할 수 있습니다.</p>
+                <h1 class="app-title">주일 성경 본문 HTML 생성기 2.2</h1>
+                <p class="app-description">말씀 MP3 파일명, 패밀리모임지 링크, 성경 본문을 입력하면 게시판용 HTML을 생성합니다. 본문은 여러 구절을 추가할 수 있습니다.</p>
             </div>
-            <div class="version">v2.1</div>
+            <div class="version">v2.2</div>
         </header>
 
         <div class="workspace">
@@ -29,19 +29,20 @@
 
                 <div class="field">
                     <div class="field-header">
-                        <label class="field-label" for="lesson">설교노트 링크</label>
+                        <label class="field-label" for="lesson">패밀리모임지 링크</label>
                         <span class="field-help">(선택)</span>
                         <div class="tooltip-wrap" id="tooltipWrap">
                             <button type="button" id="infoBtn" class="tooltip-trigger">안내</button>
                             <div id="helpBox" class="tooltip-box">
-                                <strong>설교노트 링크 복사 방법</strong><br>
+                                <strong>패밀리모임지 링크 복사 방법</strong><br>
                                 1. 다운로드 버튼을 클릭합니다.<br>
                                 2. <strong>링크 주소 복사</strong>를 선택합니다.<br>
-                                <img src="guide.png" alt="설교노트 링크 복사 안내">
+                                <img src="guide.png" alt="패밀리모임지 링크 복사 안내">
                             </div>
                         </div>
                     </div>
                     <input id="lesson" placeholder="http://www.shinseung.or.kr/File/Download?...">
+                    <p id="lessonNotice" class="field-notice" aria-live="polite"></p>
                 </div>
 
                 <div class="field field-bible">

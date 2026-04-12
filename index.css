@@ -9,8 +9,13 @@
     --primary-dark:#315992;
     --success:#10b981;
     --success-dark:#0d966b;
+    --success-bg:#ecfdf5;
+    --success-border:#a7f3d0;
     --secondary:#e7eef8;
     --secondary-text:#2d5c9f;
+    --warning:#b45309;
+    --warning-bg:#fffbeb;
+    --warning-border:#fcd34d;
     --notice-bg:#fff3cd;
     --notice-border:#ffeeba;
     --notice-text:#856404;
@@ -142,6 +147,32 @@ body{
     font-size:13px;
     color:var(--muted);
     line-height:1.5;
+}
+
+.field-notice{
+    display:none;
+    margin:8px 0 0;
+    padding:8px 10px;
+    border:1px solid transparent;
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.field-notice.is-visible{
+    display:block;
+}
+
+.field-notice-success{
+    color:var(--success-dark);
+    background:var(--success-bg);
+    border-color:var(--success-border);
+}
+
+.field-notice-warning{
+    color:var(--warning);
+    background:var(--warning-bg);
+    border-color:var(--warning-border);
 }
 
 input,
