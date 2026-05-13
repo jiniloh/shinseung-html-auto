@@ -166,6 +166,13 @@ function getSortedNumericKeys(object) {
         .sort((a, b) => a - b);
 }
 
+function getContiguousVerseRange(chapterData) {
+    const nums = Object.keys(chapterData || {}).map(Number);
+    if (nums.length === 0) return [];
+    const max = Math.max(...nums);
+    return Array.from({ length: max }, (_, index) => index + 1);
+}
+
 function initializeBiblePicker() {
     normalizedBibleData = normalizeBibleData(window.BIBLE_DATA || {});
     availableBooks = CANONICAL_BOOKS.filter((book) => normalizedBibleData[book.code]);
@@ -196,7 +203,7 @@ function updateChapterOptions() {
 function updateVerseOptions() {
     const bookCode = elements.bookSelect.value;
     const chapter = Number(elements.chapterSelect.value);
-    const verses = getSortedNumericKeys((normalizedBibleData[bookCode] || {})[chapter] || {});
+    const verses = getContiguousVerseRange((normalizedBibleData[bookCode] || {})[chapter]);
 
     fillSelectOptions(elements.verseStartSelect, verses);
     updateVerseEndOptions();
@@ -206,7 +213,7 @@ function updateVerseEndOptions() {
     const bookCode = elements.bookSelect.value;
     const chapter = Number(elements.chapterSelect.value);
     const startVerse = Number(elements.verseStartSelect.value);
-    const verses = getSortedNumericKeys((normalizedBibleData[bookCode] || {})[chapter] || {})
+    const verses = getContiguousVerseRange((normalizedBibleData[bookCode] || {})[chapter])
         .filter((verse) => verse >= startVerse);
 
     fillSelectOptions(elements.verseEndSelect, verses);
@@ -227,7 +234,7 @@ function getSelectedPassageText() {
 
     for (let verse = startVerse; verse <= endVerse; verse += 1) {
         const verseText = sanitizeVerseText(chapterData[verse]);
-        if (verseText) verses.push(`${verse}. ${verseText}`);
+        verses.push(`${verse}. ${verseText || "내용 없음"}`);
     }
 
     return verses.join("\n");
