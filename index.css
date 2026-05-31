@@ -56,8 +56,8 @@ body {
 .app-card {
   max-width: 980px;
   margin: 0 auto;
-  background: var(--card-bg);
-  border: 1px solid var(--line);
+  background: #f0f3fc;                  /* 파스텔 블루 면 — 흰색 카드를 담는 바깥 배경 (연한 톤) */
+  border: 1px solid #dbe3f2;
   border-radius: 18px;
   box-shadow: 0 1px 2px rgba(20,24,33,.04);
   padding: 26px 28px 28px;
@@ -96,8 +96,9 @@ body {
 /* ---------- 처음 사용자 안내 배너 ---------- */
 .guide-card {
   display: flex; align-items: center; gap: 16px;
-  background: var(--accent-soft); border: 1px solid var(--accent-line);
+  background: #ffffff; border: 1px solid var(--accent-line);
   border-radius: var(--radius-card); padding: 13px 16px; margin-bottom: 18px;
+  box-shadow: 0 3px 14px -6px rgba(20,24,33,.12);
 }
 .guide-card .gc-q { font-size: 13px; font-weight: 700; color: var(--accent); white-space: nowrap; display: flex; align-items: center; gap: 8px; }
 .guide-card .gc-ico { width: 26px; height: 26px; border-radius: 50%; flex: none; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; }
@@ -110,13 +111,14 @@ body {
 .gc-x { flex: none; width: 24px; height: 24px; border-radius: 7px; border: none; background: transparent; color: var(--muted); cursor: pointer; display: grid; place-items: center; font-size: 14px; line-height: 1; }
 .gc-x:hover { background: rgba(0,0,0,.06); color: var(--ink); }
 
-/* ---------- 2단 그리드 ---------- */
-.tool-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.08fr); gap: 18px; }
-@media (max-width: 760px) { .tool-grid { grid-template-columns: 1fr; } }
+/* ---------- 세로 스택(① 예배 정보 → ② 성경 본문) ---------- */
+.tool-grid { display: grid; grid-template-columns: 1fr; gap: 18px; }
 
 .panel {
-  background: var(--card-bg); border: 1px solid var(--line);
+  background: #ffffff;                 /* 흰색 카드 (바깥 파스텔 면 위에서 떠 보이게) */
+  border: 1px solid var(--line);
   border-radius: var(--radius-card); padding: 18px;
+  box-shadow: 0 3px 14px -6px rgba(20,24,33,.12);
   display: flex; flex-direction: column; gap: 14px;
 }
 .panel-head { display: flex; align-items: center; gap: 8px; }
