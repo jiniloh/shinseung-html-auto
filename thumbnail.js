@@ -269,6 +269,28 @@
     }, "image/png");
   }
 
+  var PRESET_KEY = "ssthumb.preset";   // 예배 선택 마지막 값 기억
+  function savedPreset() {
+    try { return localStorage.getItem(PRESET_KEY); } catch (e) { return null; }
+  }
+  function rememberPreset(value) {
+    try { localStorage.setItem(PRESET_KEY, value); } catch (e) { /* 저장 불가 환경 무시 */ }
+  }
+  function todayLocalISO() {
+    var d = new Date();
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate());
+  }
+  // 캔버스 전용 폰트(Paperlogy/SUIT)를 명시적으로 로드 — 폰트 미설치 PC에서도
+  // 폴백폰트로 그려지지 않도록 렌더 전에 보장한다.
+  function loadFonts() {
+    if (!document.fonts || !document.fonts.load) return Promise.resolve();
+    return Promise.all([
+      document.fonts.load("700 100px 'Paperlogy'"),
+      document.fonts.load("700 100px 'SUIT'"),
+      document.fonts.load("600 100px 'SUIT'")
+    ]).catch(function () {});
+  }
+
   function bind() {
     ["serviceName", "dateInput", "referenceInput", "titleInput"].forEach(function (id) {
       $(id).addEventListener("input", function () {
@@ -280,6 +302,7 @@
     $("servicePreset").addEventListener("change", function () {
       var service = services[$("servicePreset").value] || services.sunday;
       $("serviceName").value = service.service;
+      rememberPreset($("servicePreset").value);
       updateFileName();
       render();
     });
@@ -289,9 +312,19 @@
   }
 
   bind();
+
+  // 지난번 '예배 선택' 복원 (없으면 HTML 기본값 유지)
+  var initialPreset = savedPreset();
+  if (initialPreset && services[initialPreset]) {
+    $("servicePreset").value = initialPreset;
+    $("serviceName").value = services[initialPreset].service;
+  }
+  // 날짜는 페이지를 연 날짜(오늘)로 기본 설정
+  $("dateInput").value = todayLocalISO();
   updateFileName();
-  var ready = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
-  ready.then(loadImages).then(render, function () {
+
+  // 폰트(캔버스용) 로드 후 렌더 — 미설치 PC에서도 정확한 폰트로 그려지게
+  Promise.all([loadFonts(), loadImages()]).then(render, function () {
     setStatus("배경 이미지를 불러오지 못했습니다.", "warn");
   });
 })();
