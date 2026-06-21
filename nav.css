@@ -1,0 +1,58 @@
+/* ============================================================
+   공통 상단 내비 — 두 도구(성경 본문 / 썸네일) 전환
+   index.html, thumbnail.html이 함께 link 합니다.
+   색/토큰은 각 페이지 CSS(:root)에서 가져옵니다(없으면 fallback).
+   가로폭은 페이지별로 .site-nav에 지정(index=980 / thumbnail=1180).
+   ============================================================ */
+.site-nav {
+  margin: 0 auto 16px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--line, #e6e7ea);
+  border-radius: 14px;
+  box-shadow: 0 3px 14px -6px rgba(20, 24, 33, .12);
+}
+.site-nav-inner {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 9px 14px;
+}
+.site-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: var(--ink, #17181b);
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+}
+.site-brand img { width: 26px; height: 26px; object-fit: contain; flex: none; }
+
+.site-tabs {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 4px;
+  background: var(--accent-soft, #eef3fa);
+  border: 1px solid var(--accent-line, #cfe0f1);
+  padding: 4px;
+  border-radius: 999px;
+}
+.site-tab {
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted, #6b7280);
+  padding: 7px 15px;
+  border-radius: 999px;
+  transition: background .14s, color .14s;
+  white-space: nowrap;
+}
+.site-tab:hover { color: var(--accent, #3f6fb6); }
+.site-tab.is-active { background: var(--accent, #3f6fb6); color: #fff; }
+
+@media (max-width: 560px) {
+  .site-brand span { display: none; }      /* 좁은 화면: 로고만, 탭 우선 */
+  .site-tab { padding: 7px 12px; }
+}

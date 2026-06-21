@@ -8,18 +8,27 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="index.css"/>
+<link rel="stylesheet" href="nav.css"/>
 </head>
 <body>
+<nav class="site-nav" aria-label="도구 전환">
+  <div class="site-nav-inner">
+    <a class="site-brand" href="index.html"><img src="assets/logo.png" alt=""/><span>신승교회</span></a>
+    <div class="site-tabs">
+      <a class="site-tab is-active" href="index.html" aria-current="page">성경 본문</a>
+      <a class="site-tab" href="thumbnail.html">썸네일</a>
+    </div>
+  </div>
+</nav>
 <main class="app-card">
 
   <!-- ── 헤더 ── -->
   <header class="tool-header">
-    <div class="tool-logo"><img src="assets/logo.png" alt="신승교회"/></div>
     <div class="tool-titles">
       <h1 class="tool-title">주일 성경 본문 생성기</h1>
       <p class="tool-sub">신승교회 · 예배 본문을 게시판용 HTML로 변환합니다</p>
     </div>
-    <span class="tool-ver">v3.1</span>
+    <span class="tool-ver">v3.2</span>
   </header>
 
   <!-- ── 스텝 인디케이터 ── -->

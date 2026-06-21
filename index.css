@@ -53,6 +53,8 @@ body {
   padding: 32px 20px 56px;
 }
 
+.site-nav { max-width: 980px; }
+
 .app-card {
   max-width: 980px;
   margin: 0 auto;
