@@ -9,8 +9,8 @@
   var COLOR_INK = "#392a15";
   var COLOR_SEP = "#978d84";
   var REF_BAR = { w: 12, h: 46, y: 17, color: "#7f6848" };
-  var REF_TEXT = { x: 34, y: 10, font: "SUIT", weight: 600, size: 48, spacing: 0, color: COLOR_INK };
-  var META = { font: "SUIT", weight: 700, size: 62, spacing: -1.24, yLineOffset: 0 };
+  var REF_TEXT = { x: 34, y: 10, font: "SUIT", weight: 600, size: 48, spacing: 0, baseline: 47.47, color: COLOR_INK };
+  var META = { font: "SUIT", weight: 700, size: 62, spacing: -1.24, baseline: 61.07 };
 
   var services = {
     sunday: {
@@ -21,12 +21,12 @@
       variants: {
         one: {
           meta: { dateX: 81, y: 34, sepGap: 36, serviceGap: 57 },
-          title: { x: 249, y: 329, w: 766, align: "left", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, color: COLOR_INK },
+          title: { x: 249, y: 329, w: 766, align: "left", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, baseline: 97.89, color: COLOR_INK },
           ref: { x: 249, y: 477 }
         },
         two: {
           meta: { dateX: 67, y: 34, sepGap: 36, serviceGap: 57 },
-          title: { x: 254, y: 295, w: 812, align: "left", font: "Paperlogy", weight: 700, size: 88, lineHeight: 109, spacing: 1.76, color: COLOR_INK },
+          title: { x: 254, y: 295, w: 812, align: "left", font: "Paperlogy", weight: 700, size: 88, lineHeight: 109, spacing: 1.76, baseline: 88.72, color: COLOR_INK },
           ref: { x: 254, y: 534 }
         }
       }
@@ -39,12 +39,12 @@
       variants: {
         one: {
           meta: { dateX: 209, y: 33, sepGap: 28, serviceGap: 49 },
-          title: { x: 137, y: 304, w: 1006, align: "center", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, color: "#482215" },
+          title: { x: 137, y: 304, w: 1006, align: "center", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, baseline: 97.89, color: "#482215" },
           ref: { x: 407, y: 442 }
         },
         two: {
           meta: { dateX: 215.5, y: 33, sepGap: 28, serviceGap: 49 },
-          title: { x: 78, y: 255, w: 1124, align: "center", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, color: "#482215" },
+          title: { x: 78, y: 255, w: 1124, align: "center", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, baseline: 97.89, color: "#482215" },
           ref: { x: 414.5, y: 521 }
         }
       }
@@ -57,12 +57,12 @@
       variants: {
         one: {
           meta: { dateX: 257.5, y: 31, sepGap: 28, serviceGap: 49 },
-          title: { x: 314, y: 310, w: 652, align: "center", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, color: "#6f4c1b" },
+          title: { x: 314, y: 310, w: 652, align: "center", font: "Paperlogy", weight: 700, size: 100, lineHeight: 118, spacing: 2, baseline: 97.89, color: "#6f4c1b" },
           ref: { x: 406, y: 448 }
         },
         two: {
           meta: { dateX: 257, y: 31, sepGap: 28, serviceGap: 49 },
-          title: { x: 234, y: 254, w: 812, align: "center", font: "Paperlogy", weight: 700, size: 88, lineHeight: 109, spacing: 1.76, color: "#6f4c1b" },
+          title: { x: 234, y: 254, w: 812, align: "center", font: "Paperlogy", weight: 700, size: 88, lineHeight: 109, spacing: 1.76, baseline: 88.72, color: "#6f4c1b" },
           ref: { x: 390.5, y: 502 }
         }
       }
@@ -109,11 +109,12 @@
 
     ctx.font = font(style);
     ctx.fillStyle = style.color;
-    ctx.textBaseline = "top";
+    ctx.textBaseline = style.baseline == null ? "top" : "alphabetic";
     ctx.textAlign = "left";
+    var drawY = style.baseline == null ? y : y + style.baseline;
 
     parts.forEach(function (part) {
-      ctx.fillText(part, cursor, y);
+      ctx.fillText(part, cursor, drawY);
       cursor += ctx.measureText(part).width + (style.spacing || 0);
     });
     return width;
@@ -174,6 +175,7 @@
       weight: META.weight,
       size: META.size,
       spacing: META.spacing,
+      baseline: META.baseline,
       color: "#ffffff"
     };
     var serviceStyle = {
@@ -181,6 +183,7 @@
       weight: META.weight,
       size: META.size,
       spacing: META.spacing,
+      baseline: META.baseline,
       color: service.serviceColor
     };
     var sepStyle = {
@@ -188,6 +191,7 @@
       weight: META.weight,
       size: META.size,
       spacing: META.spacing,
+      baseline: META.baseline,
       color: COLOR_SEP
     };
 
