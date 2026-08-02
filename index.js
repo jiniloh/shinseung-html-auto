@@ -436,19 +436,11 @@ ${passageHtml}
   }
   function currentResultHtml() {
     var rawMp3 = $("mp3").value.trim();
-    var mp3 = rawMp3 && !/\.mp3$/i.test(rawMp3) ? rawMp3 + ".mp3" : rawMp3;
+    var mp3 = rawMp3 ? rawMp3.replace(/\.mp3$/i, "") + ".mp3" : "";
     return buildResultHtml(mp3, state.lessonUrl, bible.value.trim());
   }
-  function buildPreviewNotice() {
-    if (window.location.protocol !== "https:") return "";
-    return `
-<div class="preview-notice">
-현재 이 페이지에서는 다운로드 버튼이 바로 동작하지 않을 수 있습니다.<br>
-실제 게시 페이지에서 최종 동작을 다시 확인해 주세요. HTTPS 페이지에서는 HTTP 다운로드가 제한될 수 있습니다.
-</div>`;
-  }
   function renderPreview(html) {
-    $("preview").innerHTML = buildPreviewNotice() + html;
+    $("preview").innerHTML = html;
   }
 
   /* ---------- 13. 스텝 전환 ---------- */

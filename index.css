@@ -7,7 +7,6 @@
    - #tooltipWrap.hover-active, #helpBox.active        → 툴팁 표시
    - #lessonNotice.field-notice.is-visible
         + .field-notice-success / .field-notice-warning → 링크 안내
-   - .preview-notice (JS가 미리보기 안내문으로 생성)
    ============================================================ */
 
 :root {
@@ -269,8 +268,6 @@ select.select {
 .preview-empty .pe-ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent); }
 .preview-empty .pe-title { font-size: 13px; font-weight: 600; color: var(--muted); }
 .preview-empty .pe-sub { font-size: 12px; line-height: 1.55; max-width: 240px; }
-.preview-notice { font-size: 12px; color: var(--warn); background: var(--warn-soft); border: 1px solid color-mix(in srgb, var(--warn) 24%, transparent); border-radius: var(--radius-sm); padding: 8px 11px; margin-bottom: 10px; }
-
 /* 미리보기 내부 렌더(게시판에 보일 모습) */
 .pv-doc { font-family: var(--font); color: #222; }
 .pv-doc .pv-meta { font-size: 12px; color: #5a6472; border-left: 3px solid var(--accent); padding: 2px 0 2px 10px; margin-bottom: 12px; line-height: 1.7; }
