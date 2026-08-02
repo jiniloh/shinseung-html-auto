@@ -372,8 +372,8 @@
   function buildActionButtons(mp3, lesson) {
     var buttons = [];
     if (mp3) {
-      var fileUrl = "http://vod.shinseung.or.kr/vod/new/" + CURRENT_YEAR + "/" + mp3;
-      var mp3Url = "http://vod.shinseung.or.kr/download.jsp?file=" + fileUrl;
+      var fileUrl = "https://vod.shinseung.or.kr/vod/new/" + CURRENT_YEAR + "/" + mp3;
+      var mp3Url = "https://vod.shinseung.or.kr/download.jsp?file=" + fileUrl;
       buttons.push(`
 <a href="${mp3Url}" target="_blank"
 style="padding:10px 20px;background:#3f6fb6;color:#fff;border-radius:30px;text-decoration:none;">
